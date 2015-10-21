@@ -47,3 +47,8 @@ jouyou
 jlpt
 jpWordAudioHtml
 keywordEnAudioFileName
+
+### Linux tips
+Add prefix and suffix to files
+
+    for f in *; do mv $f RTK1_keyrord_en_`basename $f `.mp3; done;

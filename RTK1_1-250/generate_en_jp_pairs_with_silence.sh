@@ -5,13 +5,14 @@
 
 # ajutiste failide asukoht
 
+rm -Rf tmp
 mkdir tmp
 mkdir tmp/en
 mkdir tmp/jp
 
 # vaikusefailide loomine
 enjpSilenceLen="0.5"
-lastSilenceLen="4.0"
+lastSilenceLen="10.0"
 enjpSilenceFile="tmp/enjpSilenceFile.mp3"
 lastSilenceFile="tmp/lastSilenceFile.mp3"
 
@@ -44,11 +45,19 @@ do
 
 	sox $keyword_en -r 44100 $tmp_keyword_en rate
 
+	destFile="$dest/RTK1_keyword_pair_$i.mp3"
+
 	if [ -f $tmp_keyword_jp ]; then
-		sox $tmp_keyword_en $enjpSilenceFile $tmp_keyword_jp $lastSilenceFile "$dest/RTK1_keyword_pair_$i.mp3"
+		sox $tmp_keyword_en $enjpSilenceFile $tmp_keyword_jp $lastSilenceFile $destFile
 	else	
-		sox $tmp_keyword_en $lastSilenceFile "$dest/RTK1_keyword_pair_$i.mp3"
+		sox $tmp_keyword_en $lastSilenceFile $destFile
 	fi
+
+	kbl="/home/scylla/projects/rtk1_with_media/kanji-by-line.txt"
+	kanji=`sed "$i q;d" $kbl`
+
+	id3tool -t $kanji -a "" -r "" -y "" -c $i $destFile
+
 done
 
 # enda järelt koristamine

@@ -53,7 +53,7 @@ do
 		sox $tmp_keyword_en $lastSilenceFile $destFile
 	fi
 
-	kbl="/home/scylla/projects/rtk1_with_media/kanji-by-line.txt"
+	kbl="../kanji-by-line.txt"
 	kanji=`sed "$i q;d" $kbl`
 
 	id3tool -t $kanji -a "" -r "" -y "" -c $i $destFile

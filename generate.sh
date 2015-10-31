@@ -5,6 +5,8 @@
 ## 1-250 video
 #bash generate.sh --from-heisig=1 --to-heisig=250 --video=false --jp-keyword=true --silence-prefix=0.7 --silence-between-words=0.5 --silence-suffix=10.0
 
+dir=`pwd`
+
 # Parse input parameters
 
 for i in "$@"
@@ -121,9 +123,9 @@ do
 	destFile="$audioTargetPath/RTK1_keyword_pair_$i.mp3"
 
 	if [ $isJpKeyword == "true" ] && [ -f $tmp_keyword_jp ]; then
-		sox $prefixSilenceFile $tmp_keyword_en $enjpSilenceFile $tmp_keyword_jp $lastSilenceFile $destFile
+		sox $silencePrefixFile $tmp_keyword_en $silenceBetweenWordsFile $tmp_keyword_jp $silenceSuffixFile $destFile
 	else	
-		sox $prefixSilenceFile $tmp_keyword_en $lastSilenceFile $destFile
+		sox $silencePrefixFile $tmp_keyword_en $silenceSuffixFile $destFile
 	fi
 
 	kbl="kanji-by-line.txt"
@@ -142,9 +144,10 @@ done
 if [ $isVideo = "true" ]; then
 	for i in `seq $fromHeisig $toHeisig`
 	do
-		echo "Create audio for $i"
-		ffmpeg -loop 1 -i "svg-to-png-grey-bg/$i.png" -i "$audioTargetPath/RTK1_keyword_pair_$i.mp3" -shortest -acodec copy "$videoTargetPath/RTK1_keyword_pair_$i.mp4"
-		cat "file '$videoTargetPath/RTK1_keyword_pair_$i.mp4'" >> "$cachePath/videos.txt"
+		fflog="$cachePath/ffmpeg-image-and-audio.log"
+		echo "Create video for $i. Tail log file - $fflog"
+		ffmpeg -loop 1 -i "svg-to-png-grey-bg/$i.png" -i "$audioTargetPath/RTK1_keyword_pair_$i.mp3" -shortest -acodec copy "$videoTargetPath/RTK1_keyword_pair_$i.mp4" &> $fflog
+		echo "file '$dir/$videoTargetPath/RTK1_keyword_pair_$i.mp4'" >> "$cachePath/videos.txt"
 	done
 
 	# ühe pika video loomine

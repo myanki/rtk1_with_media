@@ -146,7 +146,7 @@ if [ $isVideo = "true" ]; then
 	do
 		fflog="$cachePath/ffmpeg-image-and-audio.log"
 		echo "Create video for $i. Tail log file - $fflog"
-		ffmpeg -loop 1 -i "svg-to-png-grey-bg/$i.png" -i "$audioTargetPath/RTK1_keyword_pair_$i.mp3" -shortest -acodec copy "$videoTargetPath/RTK1_keyword_pair_$i.mp4" &> $fflog
+		ffmpeg -loop 1 -i "svg-to-png-grey-bg/$i.png" -i "$audioTargetPath/RTK1_keyword_pair_$i.mp3" -shortest -acodec copy "$videoTargetPath/RTK1_keyword_pair_$i.mp4" &>> $fflog
 		echo "file '$dir/$videoTargetPath/RTK1_keyword_pair_$i.mp4'" >> "$cachePath/videos.txt"
 	done
 
